@@ -1,9 +1,9 @@
-﻿using Movies.Core.JsonHelpers;
+﻿using Movies.DotnetCore.JsonHelpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Movies.Core.Models
+namespace Movies.DotnetCore.Models
 {
     public class Movie
     {
@@ -12,9 +12,9 @@ namespace Movies.Core.Models
         public string Awards { get; set; }
         public string Country { get; set; }
         public string Director { get; set; }
-        [JsonProperty("Genre"), JsonConverter(typeof(StringListConverter))]
+        [JsonConverter(typeof(StringListConverter))]
         public IEnumerable<string> Genres { get; set; }
-        [JsonProperty("Language"), JsonConverter(typeof(StringListConverter))]
+        [JsonConverter(typeof(StringListConverter))]
         public IEnumerable<string> Languages { get; set; }
         [JsonConverter(typeof(IntConverter))]
         public int Metascore { get; set; }
@@ -24,11 +24,11 @@ namespace Movies.Core.Models
         [JsonConverter(typeof(DateConverter))]
         public DateTime? Released { get; set; }
         public bool Response { get; set; }
-        [JsonProperty("RunTime"), JsonConverter(typeof(IntConverter))]
+        [JsonConverter(typeof(IntConverter))]
         public int RuntimeMinutes { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
-        [JsonProperty("Writer"), JsonConverter(typeof(StringListConverter))]
+        [JsonConverter(typeof(StringListConverter))]
         public IEnumerable<string> Writers { get; set; }
         public string ImdbID { get; set; }
         public double ImdbRating { get; set; }

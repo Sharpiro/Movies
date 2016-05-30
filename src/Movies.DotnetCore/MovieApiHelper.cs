@@ -1,17 +1,18 @@
-﻿using Movies.Core.Models;
-using Newtonsoft.Json;
+﻿using Movies.DotnetCore.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Movies.DotnetCore.JsonHelpers;
 
-namespace Movies.Core
+namespace Movies.DotnetCore
 {
-    public class MovieHelper
+    public class MovieApiHelper
     {
         private readonly HttpWrapper _wrapper;
 
-        public MovieHelper(HttpWrapper wrapper)
+        public MovieApiHelper(HttpWrapper wrapper)
         {
             _wrapper = wrapper;
         }
@@ -28,16 +29,14 @@ namespace Movies.Core
         {
             var url = string.Format(MovieConstants.Urls.Omdb, movieId);
             var movieData = await _wrapper.GetASync(url);
-            var movie = JsonConvert.DeserializeObject<Movie>(movieData);
-            movie.Rank = rank + 1;
-            return movie;
-        }
-
-        public async Task<IEnumerable<Movie>> GetAllMovieData(int take = 250)
-        {
-            var movieIds = GetTopMovieIds().ToList();
-            var movieDetailsList = await Task.WhenAll(movieIds.Take(take).Select((id, other) => GetMovieInfo(id, other)));
-            return movieDetailsList;
+            var jObject = JObject.Parse(movieData);
+            jObject.ReplacePropertyName("Language", "Languages");
+            jObject.ReplacePropertyName("Genre", "Genres");
+            jObject.ReplacePropertyName("Runtime", "RuntimeMinutes");
+            jObject.ReplacePropertyName("Writer", "Writers");
+            var movieModified = jObject.ToObject<Movie>();
+            movieModified.Rank = rank + 1;
+            return movieModified;
         }
     }
 }

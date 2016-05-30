@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Movies.Core
+namespace Movies.DotnetCore
 {
     public class HttpWrapper
     {

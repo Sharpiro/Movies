@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 
-namespace Movies.Core.JsonHelpers
+namespace Movies.DotnetCore.JsonHelpers
 {
     public class DateConverter : JsonConverter
     {
@@ -25,6 +25,7 @@ namespace Movies.Core.JsonHelpers
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            serializer.Serialize(writer, value);
         }
     }
 }

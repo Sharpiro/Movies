@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Movies.Core.JsonHelpers
+namespace Movies.DotnetCore.JsonHelpers
 {
     public class IntConverter : JsonConverter
     {
@@ -28,7 +28,7 @@ namespace Movies.Core.JsonHelpers
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            //writer.WriteValue(value.ToString().Replace("", ","));
+            serializer.Serialize(writer, value);
         }
     }
 }

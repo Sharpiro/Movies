@@ -1,4 +1,4 @@
-﻿namespace Movies.Core
+﻿namespace Movies.DotnetCore
 {
     public static class MovieConstants
     {
