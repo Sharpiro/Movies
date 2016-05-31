@@ -17,7 +17,7 @@ namespace Movies.DotnetCore
 
         public async Task<IEnumerable<Movie>> GetMovieData(int take)
         {
-            if (take <= 0 || take > 250)
+            if (take < 1 || take > 250)
                 throw new ArgumentOutOfRangeException(nameof(take), "'take' must be between 1 and 250 inclusively");
             var movieIds = _movieApiHelper.GetTopMovieIds();
             var movieDetailsList = await Task.WhenAll(movieIds.Take(take).Select((id, other) =>

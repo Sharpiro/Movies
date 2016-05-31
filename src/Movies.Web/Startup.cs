@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNet.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Movies.DotnetCore;
@@ -21,10 +22,11 @@ namespace Movies.Web
                 app.UseDeveloperExceptionPage();
             app.UseMvc(rb =>
             {
-                rb.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //rb.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 rb.MapRoute("defaultApi", "api/{controller}/{action}/{id?}");
             });
             app.UseFileServer();
+            app.UseCustomFileServer(env, "node_modules");
         }
     }
 }

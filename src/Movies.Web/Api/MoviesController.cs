@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Movies.DotnetCore;
+﻿using Movies.DotnetCore;
 using Movies.DotnetCore.Models;
 using System.Collections.Generic;
 
 namespace Movies.Web.Api
 {
-    public class MoviesController : Controller
+    public class MoviesController
     {
         private readonly MovieBusinessLayer _movieBusinessLayer;
 
@@ -14,9 +13,9 @@ namespace Movies.Web.Api
             _movieBusinessLayer = movieHelper;
         }
 
-        public IEnumerable<Movie> GetMovieData()
+        public IEnumerable<Movie> GetMovieData(int take)
         {
-            var data = _movieBusinessLayer.GetMovieData(5).Result;
+            var data = _movieBusinessLayer.GetMovieData(take).Result;
             return data;
         }
     }
