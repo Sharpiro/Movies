@@ -15,4 +15,9 @@ export class MovieListComponent
     {
         this._movieService.GetMovieData(10).subscribe(data => this.movies = data);
     }
+
+    {
+        var date = Date.parse(dateString);
+        return date;
+    }
 }
