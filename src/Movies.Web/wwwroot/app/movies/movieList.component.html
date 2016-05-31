@@ -16,6 +16,7 @@
             <td>{{movie.Title}}</td>
             <td>{{movie.ImdbRating}}</td>
             <td>{{movie.RuntimeMinutes}}</td>
+            <td>{{stringToDateMilliseconds(movie.Released) | date:'y'}}</td>
         </tr>
     </table>
 </div>
