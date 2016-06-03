@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Movies.DotnetCore;
+using Movies.DotnetCore.Interfaces;
 
 namespace Movies.Web
 {
@@ -12,7 +14,7 @@ namespace Movies.Web
         {
             services.AddTransient<HttpWrapper, HttpWrapper>();
             services.AddTransient<MovieApiHelper, MovieApiHelper>();
-            services.AddTransient<MovieBusinessLayer, MovieBusinessLayer>();
+            services.AddTransient<IMovieBusinessLayer, FakeMovieBusinessLayer>();
             services.AddMvc();
         }
 

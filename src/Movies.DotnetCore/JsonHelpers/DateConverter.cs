@@ -14,13 +14,19 @@ namespace Movies.DotnetCore.JsonHelpers
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            DateTime returnDate;
+            if (objectType == typeof(DateTime))
+            {
+                returnDate = JToken.Load(reader).Value<DateTime>();
+                return returnDate;
+            }
             var value = JToken.Load(reader).Value<string>();
             var split = value.Split(' ').Reverse();
             if (split.Count() < 3)
-                return null;
+                return DateTime.MinValue;
             var newValue = string.Join(" ", split);
-            var datetime = DateTime.Parse(newValue);
-            return datetime;
+            returnDate = DateTime.Parse(newValue);
+            return returnDate;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Movies.DotnetCore.JsonHelpers;
+using Movies.DotnetCore.Interfaces;
 
 namespace Movies.DotnetCore
 {
-    public class MovieApiHelper
+    public class MovieApiHelper : IMovieApiHelper
     {
         private readonly HttpWrapper _wrapper;
 

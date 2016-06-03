@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Movies.DotnetCore.JsonHelpers
@@ -14,9 +16,15 @@ namespace Movies.DotnetCore.JsonHelpers
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var value = JToken.Load(reader).Value<string>();
-            var split = value.Split(',').Select(v => v.Trim());
-            return split;
+            IEnumerable<string> result;
+            if (objectType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                result = JArray.Load(reader).ToObject<List<string>>();
+                return result;
+            }
+            result = JToken.Load(reader).Value<string>()
+                .Split(',').Select(v => v.Trim());
+            return result;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

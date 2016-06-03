@@ -22,7 +22,7 @@ namespace Movies.DotnetCore.Models
         public string Poster { get; set; }
         public string Rated { get; set; }
         [JsonConverter(typeof(DateConverter))]
-        public DateTime? Released { get; set; }
+        public DateTime Released { get; set; }
         public bool Response { get; set; }
         [JsonConverter(typeof(IntConverter))]
         public int RuntimeMinutes { get; set; }

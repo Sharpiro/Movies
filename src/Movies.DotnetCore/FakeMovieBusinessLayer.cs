@@ -1,30 +1,23 @@
-﻿using Movies.DotnetCore.Models;
+﻿using Movies.DotnetCore.Interfaces;
+using Movies.DotnetCore.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using Movies.DotnetCore.Interfaces;
-using System.Reflection;
 
 namespace Movies.DotnetCore
 {
-    public class MovieBusinessLayer : IMovieBusinessLayer
+    public class FakeMovieBusinessLayer : IMovieBusinessLayer
     {
-        private readonly MovieApiHelper _movieApiHelper;
-
-        public MovieBusinessLayer(MovieApiHelper movieApiHelper)
-        {
-            _movieApiHelper = movieApiHelper;
-        }
+        public string DataPath { get; set; } = @"c:\users\u403598\desktop\temp\movies";
 
         public async Task<IEnumerable<Movie>> GetMovieData(int take = 250)
         {
-            if (take < 1 || take > 250)
-                throw new ArgumentOutOfRangeException(nameof(take), "'take' must be between 1 and 250 inclusively");
-            var movieIds = _movieApiHelper.GetTopMovieIds();
-            var movieDetailsList = await Task.WhenAll(movieIds.Take(take).Select((id, index) =>
-                _movieApiHelper.GetMovieInfo(id, index)));
-            return movieDetailsList;
+            var movieString = File.ReadAllText($"{DataPath}\\movieData.txt");
+            var movies = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Movie>>(movieString));
+            return movies.Take(take);
         }
 
         public IEnumerable<Movie> GetMoviesByQuery(IEnumerable<Movie> movies, MovieQuery query)
