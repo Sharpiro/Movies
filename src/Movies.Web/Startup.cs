@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Movies.DotnetCore;
 using Movies.DotnetCore.Interfaces;
@@ -10,11 +11,21 @@ namespace Movies.Web
 {
     public class Startup
     {
+        private IConfiguration _configuration;
+
+        public Startup(IHostingEnvironment env)
+        {
+            _configuration = new ConfigurationBuilder().SetBasePath(env.ContentRootPath)
+                .AddJsonFile("config.json").AddEnvironmentVariables().Build();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            var path = _configuration["Data:FilePath"];
+            services.AddSingleton(provider => _configuration);
             services.AddTransient<HttpWrapper, HttpWrapper>();
-            services.AddTransient<MovieApiHelper, MovieApiHelper>();
-            services.AddTransient<IMovieBusinessLayer, FakeMovieBusinessLayer>();
+            //services.AddTransient<IMovieRepository, MovieRepository>();
+            services.AddTransient<IMovieRepository>(provider => new StaticMovieRepository(path));
             services.AddMvc();
         }
 

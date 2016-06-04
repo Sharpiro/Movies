@@ -6,14 +6,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Movies.DotnetCore.JsonHelpers;
 using Movies.DotnetCore.Interfaces;
+using System;
 
 namespace Movies.DotnetCore
 {
-    public class MovieApiHelper : IMovieApiHelper
+    public class MovieRepository : IMovieRepository
     {
         private readonly HttpWrapper _wrapper;
 
-        public MovieApiHelper(HttpWrapper wrapper)
+        public MovieRepository(HttpWrapper wrapper)
         {
             _wrapper = wrapper;
         }
@@ -26,7 +27,7 @@ namespace Movies.DotnetCore
             return stringList;
         }
 
-        public async Task<Movie> GetMovieInfo(string movieId, int rank = 0)
+        public async Task<Movie> GetMovie(string movieId, int rank = 0)
         {
             var url = string.Format(MovieConstants.Urls.Omdb, movieId);
             var movieData = await _wrapper.GetASync(url);
@@ -38,6 +39,17 @@ namespace Movies.DotnetCore
             var movieModified = jObject.ToObject<Movie>();
             movieModified.Rank = rank + 1;
             return movieModified;
+        }
+
+        public async Task<MovieList> GetMovieList(int take = 250)
+        {
+            if (take < 1 || take > 250)
+                throw new ArgumentOutOfRangeException(nameof(take), "'take' must be between 1 and 250 inclusively");
+            var movieIds = GetTopMovieIds();
+            var movieDetailsList = await Task.WhenAll(movieIds.Take(take)
+                .Select((id, index) => GetMovie(id, index)));
+            var movieList = new MovieList(movieDetailsList);
+            return movieList;
         }
     }
 }

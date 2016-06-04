@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Movies.DotnetCore.Interfaces;
 using Movies.DotnetCore.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Movies.Web.Api
@@ -11,15 +10,15 @@ namespace Movies.Web.Api
     public class MoviesController : Controller
     {
         private IMemoryCache _cache;
-        private readonly IMovieBusinessLayer _movieBusinessLayer;
+        private readonly IMovieRepository _movieRepository;
 
-        public MoviesController(IMovieBusinessLayer movieHelper, IMemoryCache cache)
+        public MoviesController(IMovieRepository movieRepository, IMemoryCache cache)
         {
             _cache = cache;
-            _movieBusinessLayer = movieHelper;
+            _movieRepository = movieRepository;
         }
 
-        public async Task<IEnumerable<Movie>> GetMovieData(int take)
+        public async Task<MovieList> GetMovieData(int take)
         {
             var data = await GetMovieDataFromCache();
             return data;
@@ -30,7 +29,7 @@ namespace Movies.Web.Api
             try
             {
                 var movies = await GetMovieDataFromCache();
-                var filteredMovies = _movieBusinessLayer.GetMoviesByQuery(movies, query);
+                var filteredMovies = movies.Filter(query);
                 return Ok(filteredMovies);
 
             }
@@ -42,12 +41,12 @@ namespace Movies.Web.Api
             }
         }
 
-        private async Task<IEnumerable<Movie>> GetMovieDataFromCache()
+        private async Task<MovieList> GetMovieDataFromCache()
         {
-            var data = _cache.Get("movieData") as IEnumerable<Movie>;
+            var data = _cache.Get("movieData") as MovieList;
             if (data == null)
             {
-                data = await _movieBusinessLayer.GetMovieData();
+                data = await _movieRepository.GetMovieList();
                 _cache.Set("movieData", data);
             }
             return data;

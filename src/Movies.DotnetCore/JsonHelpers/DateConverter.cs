@@ -15,17 +15,17 @@ namespace Movies.DotnetCore.JsonHelpers
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             DateTime returnDate;
-            if (objectType == typeof(DateTime))
+            if (reader.ValueType == typeof(string))
             {
-                returnDate = JToken.Load(reader).Value<DateTime>();
+                var value = JToken.Load(reader).Value<string>();
+                var split = value.Split(' ').Reverse();
+                if (split.Count() < 3)
+                    return DateTime.MinValue;
+                var newValue = string.Join(" ", split);
+                returnDate = DateTime.Parse(newValue);
                 return returnDate;
             }
-            var value = JToken.Load(reader).Value<string>();
-            var split = value.Split(' ').Reverse();
-            if (split.Count() < 3)
-                return DateTime.MinValue;
-            var newValue = string.Join(" ", split);
-            returnDate = DateTime.Parse(newValue);
+            returnDate = JToken.Load(reader).Value<DateTime>();
             return returnDate;
         }
 

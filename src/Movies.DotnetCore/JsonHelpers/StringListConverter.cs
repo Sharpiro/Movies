@@ -17,13 +17,13 @@ namespace Movies.DotnetCore.JsonHelpers
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             IEnumerable<string> result;
-            if (objectType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (reader.ValueType == typeof(string))
             {
-                result = JArray.Load(reader).ToObject<List<string>>();
+                result = JToken.Load(reader).Value<string>()
+                    .Split(',').Select(v => v.Trim());
                 return result;
             }
-            result = JToken.Load(reader).Value<string>()
-                .Split(',').Select(v => v.Trim());
+            result = JArray.Load(reader).ToObject<List<string>>();
             return result;
         }
 
