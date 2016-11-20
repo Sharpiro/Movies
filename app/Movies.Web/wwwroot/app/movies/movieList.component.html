@@ -21,14 +21,14 @@
             <th>Released</th>
         </tr>
         <tr *ngFor="let movie of movies">
-            <td>{{movie.Rank}}</td>
-            <td>{{movie.ImdbID}}</td>
-            <!--            <td style="width:100px"><img style="width:100%" src="{{movie.Poster}}" /></td>-->
-            <td class="col-md-2" style="overflow:hidden;max-width:50px">{{movie.Poster}}</td>
-            <td>{{movie.Title}}</td>
-            <td>{{movie.ImdbRating}}</td>
-            <td>{{movie.RuntimeMinutes}}</td>
-            <td>{{stringToDateMilliseconds(movie.Released) | date:'y'}}</td>
+            <td>{{movie.rank}}</td>
+            <td>{{movie.imdbID}}</td>
+            <!--            <td style="width:100px"><img style="width:100%" src="{{movie.poster}}" /></td>-->
+            <td class="col-md-2" style="overflow:hidden;max-width:50px">{{movie.poster}}</td>
+            <td>{{movie.title}}</td>
+            <td>{{movie.imdbRating}}</td>
+            <td>{{movie.runtimeMinutes}}</td>
+            <td>{{movie.released}}</td>
         </tr>
     </table>
 </div>

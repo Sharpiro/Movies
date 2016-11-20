@@ -24,8 +24,8 @@ namespace Movies.Web
             var path = _configuration["Data:FilePath"];
             services.AddSingleton(provider => _configuration);
             services.AddTransient<HttpWrapper, HttpWrapper>();
-            //services.AddTransient<IMovieRepository, MovieRepository>();
-            services.AddTransient<IMovieRepository>(provider => new StaticMovieRepository(path));
+            services.AddTransient<IMovieRepository, MovieRepository>();
+            //services.AddTransient<IMovieRepository>(provider => new StaticMovieRepository(path));
             services.AddMvc();
         }
 
